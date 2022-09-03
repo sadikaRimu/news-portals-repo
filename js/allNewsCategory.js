@@ -33,17 +33,38 @@ const loadCategoryNews = (newswData) => {
         console.log(element);
         const creatDivElement = document.createElement('div');
         creatDivElement.innerHTML = `
-            <div class="card mb-3" style="">
+            <div class="card mb-3" >
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="${element.image_url}" class="img-fluid rounded-start" alt="...">
+                        <img src="${element.image_url}" class="img-fluid rounded-start" style="height:265px" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
+                            <h5 class="card-title">${element.title}</h5>
+                            <p class="card-text">${element.details.slice(0, 200)}</p>
                             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <img style="height:50px;weight:50px" class="rounded-circle me-2" src="${element.author.img}">
+                                    <div class="d-flex flex-column">
+                                        <span>${element.author.name}</span>
+                                        <small>${element.author.published_date}</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">${element.total_view}M</span>
+                                </div>
+                                <div class="d-flex">
+                                    <small class="me-2">Rating:</small>
+                                    <div>
+                                        <span>${element.rating.badge},</span>
+                                        <span>${element.rating.number}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                <button type="button" class="btn btn-primary">See More</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
