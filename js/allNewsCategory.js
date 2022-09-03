@@ -29,6 +29,12 @@ const searchByCategory = async (categoryId) => {
 }
 const loadCategoryNews = (newswData) => {
     const newsContainer = document.getElementById('news-container');
+    const categoryNumber = document.getElementById('category-number');
+    const itemNumberDisplay = document.createElement('div');
+    itemNumberDisplay.innerHTML = `
+        <h4>${newswData.length} items found for category${newswData.length}</h4>
+        `;
+    categoryNumber.appendChild(itemNumberDisplay);
     newswData.forEach(element => {
         console.log(element);
         const creatDivElement = document.createElement('div');
