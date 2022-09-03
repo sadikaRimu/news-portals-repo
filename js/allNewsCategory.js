@@ -25,16 +25,22 @@ const searchByCategory = async (categoryId) => {
     const res = await fetch(url);
     const data = await res.json();
     loadCategoryNews(data.data);
+    loadCategoryNumber(categoryId);
     console.log(categoryId);
+}
+const loadCategoryNumber = (categoryNumber) => {
+    const categoryString = parseInt(categoryNumber);
+    //categoryString.substring(1);
+    //const categoryNumberField = document.getElementById('category-number');
+    //const itemNumberDisplay = document.createElement('div');
+    //itemNumberDisplay.innerHTML = `
+    //    <h4>${categoryNumber} items found for category${categoryNumber}</h4>
+    //   `;
+    // categoryNumberField.appendChild(itemNumberDisplay);
+    console.log('from loadnumber', categoryString);
 }
 const loadCategoryNews = (newswData) => {
     const newsContainer = document.getElementById('news-container');
-    const categoryNumber = document.getElementById('category-number');
-    const itemNumberDisplay = document.createElement('div');
-    itemNumberDisplay.innerHTML = `
-        <h4>${newswData.length} items found for category${newswData.length}</h4>
-        `;
-    categoryNumber.appendChild(itemNumberDisplay);
     newswData.forEach(element => {
         console.log(element);
         const creatDivElement = document.createElement('div');
