@@ -6,7 +6,6 @@ const allNewsCategory = async () => {
 }
 const displayAllCategory = (data) => {
     const navbar = document.getElementById('all-category');
-    const practiceDiv = document.getElementById('practice-div');
     data.forEach(element => {
         const createNav = document.createElement('div');
         createNav.classList.add('navbar-nav');
@@ -25,54 +24,31 @@ const searchByCategory = async (categoryId, categoryName) => {
     const res = await fetch(url1);
     const data = await res.json();
     loadCategoryNews(data.data, categoryName);
-    // loadCategoryNumber(categoryNumber);
+
 
 }
-/*const loadCategoryNumber = async (categoryNumber) => {
-    const url = `https://openapi.programming-hero.com/api/news/categories`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const itemArry = data.data.news_category;
-    const categoryNumberField = document.getElementById('category-number');
-
-    itemArry.forEach(element => {
-        if (element.category_id == categoryNumber) {
-            const itemNumberDisplay = document.createElement('div');
-            itemNumberDisplay.innerHTML = `
-                    <h4>${categoryNumber} items found for category${element.category_name}</h4>
-                `;
-            categoryNumberField.appendChild(itemNumberDisplay);
-            console.log(element.category_id, categoryNumber);
-        }
-    });
-    console.log('from load', itemArry);
-}*/
-
 const loadCategoryNews = (newswData, newsName) => {
-    console.log(newsName);
     let count = 0;
     const newsContainer = document.getElementById('news-container');
-    //newsContainer.innerHTML = ``;
+    newsContainer.innerHTML = ``;
     newswData.forEach(element => {
-        console.log(element);
         const creatDivElement = document.createElement('div');
         creatDivElement.innerHTML = `
             <div class="card mb-3" >
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="${element.image_url}" class="img-fluid rounded-start" style="height:265px" alt="...">
+                        <img src="${element.image_url}" class="img-fluid rounded-start"  alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">${element.title}</h5>
-                            <p class="card-text">${element.details.slice(0, 200)}</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            <div class="d-flex justify-content-between">
+                            <p class="card-text text-truncate">${element.details}</p>
+                            <div class="d-flex justify-content-between mt-5">
                                 <div class="d-flex">
                                     <img style="height:50px;weight:50px" class="rounded-circle me-2" src="${element.author.img}">
                                     <div class="d-flex flex-column">
-                                        <span>${element.author.name}</span>
-                                        <small>${element.author.published_date}</small>
+                                        <span>${element.author.name ? element.author.name : 'not available'}</span>
+                                        <small class="text-muted">${element.author.published_date}</small>
                                     </div>
                                 </div>
                                 <div>
@@ -86,7 +62,7 @@ const loadCategoryNews = (newswData, newsName) => {
                                     </div>
                                 </div>
                                 <div>
-                                <button type="button" class="btn btn-primary">See More</button>
+                                <button onclick="loadModalDetails('${element._id}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsDetailModal">See More</button>
                                 </div>
                             </div>
                         </div>
@@ -98,12 +74,31 @@ const loadCategoryNews = (newswData, newsName) => {
         count = count + 1;
     });
     const categoryNumberField = document.getElementById('category-number');
+    categoryNumberField.innerHTML = ``;
     const itemNumberDisplay = document.createElement('div');
     itemNumberDisplay.innerHTML = `
-            <h4>${count} items found for category${newsName}</h4>
+            <h6>${count ? count + 'items found for category' : 'no item found for'}   ${newsName}</h6>
         `;
     categoryNumberField.appendChild(itemNumberDisplay);
-    console.log(newswData, count);
-
+}
+const loadModalDetails = async (newsDetailId) => {
+    const url = `https://openapi.programming-hero.com/api/news/${newsDetailId}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    displayNewsDetails(data.data);
+}
+const displayNewsDetails = (newsDetailsData) => {
+    const newsTitle = document.getElementById('newsDetailModalLabel');
+    const newsDtailsBodyField = document.getElementById('news-details-body');
+    newsDetailsData.forEach(element => {
+        console.log(element);
+        newsTitle.innerText = element.title;
+        newsDtailsBodyField.innerHTML = `
+        <div>
+        <span><strong>Author Name:</strong>${element.author.name}</span><br><span><strong>Published Date:</strong>${element.author.published_date}</span><br>
+        <p><strong>Details:</strong>${element.details}</p>
+        </div>
+        `;
+    });
 }
 allNewsCategory();
