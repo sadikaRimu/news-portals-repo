@@ -11,7 +11,8 @@ const allNewsCategory = async () => {
 
 }
 const displayAllCategory = (data) => {
-    const navbar = document.getElementById('all-category');
+    const navbar = document.getElementById('navbarNavAltMarkup');
+
     data.forEach(element => {
         const createNav = document.createElement('div');
         createNav.classList.add('navbar-nav');
@@ -19,13 +20,16 @@ const displayAllCategory = (data) => {
         <a type="button"  class="nav-link" onclick="searchByCategory('0'+${element.category_id},'${element.category_name}')">${element.category_name}</a>
         `;
         navbar.appendChild(createNav);
+
     });
+
 
     //console.log(data);
 
 }
 
 const searchByCategory = async (categoryId, categoryName) => {
+    toggleSpinner(true);
     const url1 = `https://openapi.programming-hero.com/api/news/category/${categoryId}`;
     try {
         const res = await fetch(url1);
@@ -92,6 +96,7 @@ const loadCategoryNews = (newswData, newsName) => {
             <h6>${count ? count + 'items found for category' : 'no item found for'}   ${newsName}</h6>
         `;
     categoryNumberField.appendChild(itemNumberDisplay);
+    toggleSpinner(false);
 }
 const loadModalDetails = async (newsDetailId) => {
     const url = `https://openapi.programming-hero.com/api/news/${newsDetailId}`;
@@ -118,5 +123,14 @@ const displayNewsDetails = (newsDetailsData) => {
         </div>
         `;
     });
+}
+const toggleSpinner = (isLoading) => {
+    const loaderField = document.getElementById('loader');
+    if (isLoading) {
+        loaderField.classList.remove('d-none');
+    }
+    else {
+        loaderField.classList.add('d-none');
+    }
 }
 allNewsCategory();
