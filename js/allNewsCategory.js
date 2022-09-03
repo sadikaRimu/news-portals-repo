@@ -11,7 +11,7 @@ const displayAllCategory = (data) => {
         const createNav = document.createElement('div');
         createNav.classList.add('navbar-nav');
         createNav.innerHTML = `
-        <a type="button"  class="nav-link" onclick="searchByCategory('0'+${element.category_id})">${element.category_name}</a>
+        <a type="button"  class="nav-link" onclick="searchByCategory('0'+${element.category_id},'${element.category_name}')">${element.category_name}</a>
         `;
         navbar.appendChild(createNav);
     });
@@ -20,27 +20,39 @@ const displayAllCategory = (data) => {
 
 }
 
-const searchByCategory = async (categoryId) => {
-    const url = `https://openapi.programming-hero.com/api/news/category/${categoryId}`;
+const searchByCategory = async (categoryId, categoryName) => {
+    const url1 = `https://openapi.programming-hero.com/api/news/category/${categoryId}`;
+    const res = await fetch(url1);
+    const data = await res.json();
+    loadCategoryNews(data.data, categoryName);
+    // loadCategoryNumber(categoryNumber);
+
+}
+/*const loadCategoryNumber = async (categoryNumber) => {
+    const url = `https://openapi.programming-hero.com/api/news/categories`;
     const res = await fetch(url);
     const data = await res.json();
-    loadCategoryNews(data.data);
-    loadCategoryNumber(categoryId);
-    console.log(categoryId);
-}
-const loadCategoryNumber = (categoryNumber) => {
-    const categoryString = parseInt(categoryNumber);
-    //categoryString.substring(1);
-    //const categoryNumberField = document.getElementById('category-number');
-    //const itemNumberDisplay = document.createElement('div');
-    //itemNumberDisplay.innerHTML = `
-    //    <h4>${categoryNumber} items found for category${categoryNumber}</h4>
-    //   `;
-    // categoryNumberField.appendChild(itemNumberDisplay);
-    console.log('from loadnumber', categoryString);
-}
-const loadCategoryNews = (newswData) => {
+    const itemArry = data.data.news_category;
+    const categoryNumberField = document.getElementById('category-number');
+
+    itemArry.forEach(element => {
+        if (element.category_id == categoryNumber) {
+            const itemNumberDisplay = document.createElement('div');
+            itemNumberDisplay.innerHTML = `
+                    <h4>${categoryNumber} items found for category${element.category_name}</h4>
+                `;
+            categoryNumberField.appendChild(itemNumberDisplay);
+            console.log(element.category_id, categoryNumber);
+        }
+    });
+    console.log('from load', itemArry);
+}*/
+
+const loadCategoryNews = (newswData, newsName) => {
+    console.log(newsName);
+    let count = 0;
     const newsContainer = document.getElementById('news-container');
+    //newsContainer.innerHTML = ``;
     newswData.forEach(element => {
         console.log(element);
         const creatDivElement = document.createElement('div');
@@ -83,8 +95,15 @@ const loadCategoryNews = (newswData) => {
             </div>
 `;
         newsContainer.appendChild(creatDivElement);
+        count = count + 1;
     });
-    console.log(newswData);
+    const categoryNumberField = document.getElementById('category-number');
+    const itemNumberDisplay = document.createElement('div');
+    itemNumberDisplay.innerHTML = `
+            <h4>${count} items found for category${newsName}</h4>
+        `;
+    categoryNumberField.appendChild(itemNumberDisplay);
+    console.log(newswData, count);
 
 }
 allNewsCategory();
