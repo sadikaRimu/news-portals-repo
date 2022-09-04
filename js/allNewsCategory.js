@@ -17,7 +17,7 @@ const displayAllCategory = (data) => {
         const createNav = document.createElement('div');
         createNav.classList.add('navbar-nav');
         createNav.innerHTML = `
-        <a type="button"  class="nav-link" onclick="searchByCategory('0'+${element.category_id},'${element.category_name}')">${element.category_name}</a>
+        <a type="button"  class="nav-link" onclick="searchByCategory('${element.category_id}','${element.category_name}')">${element.category_name}</a>
         `;
         navbar.appendChild(createNav);
 
@@ -47,8 +47,12 @@ const loadCategoryNews = (newswData, newsName) => {
     let count = 0;
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = ``;
+    newswData.sort((a, b) => {
+        return b.total_view - a.total_view;
+    });
     newswData.forEach(element => {
         const creatDivElement = document.createElement('div');
+
         creatDivElement.innerHTML = `
             <div class="card mb-3" >
                 <div class="row g-0">
@@ -68,7 +72,7 @@ const loadCategoryNews = (newswData, newsName) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <span class="fw-bold">${element.total_view}M</span>
+                                    <span class="fw-bold">${element.total_view + 'M views'}</span>
                                 </div>
                                 <div class="d-flex">
                                     <small class="me-2">Rating:</small>
@@ -118,8 +122,9 @@ const displayNewsDetails = (newsDetailsData) => {
         newsTitle.innerText = element.title;
         newsDtailsBodyField.innerHTML = `
         <div>
-        <span><strong>Author Name:</strong>${element.author.name}</span><br><span><strong>Published Date:</strong>${element.author.published_date}</span><br>
-        <p><strong>Details:</strong>${element.details}</p>
+        <span><strong>Author Name:</strong>${element.author.name ? element.author.name : 'no data found'}</span><br><span><strong>Published Date:</strong>${element.author.published_date ? element.author.published_date : 'no data found'}</span><br>
+        <p><strong>Total Views:</strong>${element.total_view ? element.total_view + 'M' : 'no data found'}</p>
+        <strong>Details:</strong><p>${element.details}</p>
         </div>
         `;
     });
